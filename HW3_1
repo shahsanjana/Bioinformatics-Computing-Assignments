@@ -1,0 +1,46 @@
+#Download or copy-and-paste the DNA sequence of the Anthrax SASP gene from the anthrax_sasp.nuc file in the course data-directory. 
+#Treat the provided sequence as the sequence to be translated (no 5' UTR). Write a Python program to 
+#print answers to the following questions:
+#Does the SASP gene start with a Met codon?
+#Does the SASP gene have a frame 1 Met codon? 
+#How many nucleotides in the SASP gene?
+#How many amino-acids in the SASP protein?
+#What is the GC content (% G or C nucleotides) of the SASP gene?
+#Test your program with other gene sequences.
+
+seq="TTGAGTAGACGAAGAGGTGTCATGTCAAATCAATTTAAAGAAGAGCTTGCAAAAGAGCTAGGCTTTTATGATGTTGTTCAGAAAGAAGGATGGGGCGGAATTCGTGCGAAAGATGCTGGTAACATGGTGAAACGTGCTATAGAAATTGCAGAACAGCAATTAATGAAACAAAACCAGTAG"
+
+if seq.startswith("ATG"):
+    print "Sequence starts with methionine"
+else:
+    print "Sequence does not start with a methionine"
+
+met = seq.find("ATG")
+tr_frame = met%3+1
+
+if tr_frame:
+    tr_frame==1
+    #atg = seq.find("ATG")
+    #atg_actual = atg+1
+    print "There is a methionine codon at position",met
+    print "The methionine is in frame", tr_frame
+else:
+    print "There is a methionine at frame", tr_frame
+
+number_of_nt = len(seq)
+
+print "the number of nucleotides in the sequence is", number_of_nt
+
+number_of_aa = number_of_nt/3
+
+print "the number of amino acids in the sequence is", number_of_aa
+
+
+number_of_G= seq.count("G")
+number_of_C= seq.count("C")
+number_of_GC = number_of_G + number_of_C
+
+percentage_of_GC = (float(number_of_GC) /(number_of_nt))*100
+
+
+print "The GC content of the gene is", percentage_of_GC,"%"
