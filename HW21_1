@@ -1,0 +1,30 @@
+#Read through an online course in SQL
+#sqlcourse.com, sql-tutorial.net, ...
+		
+#Write a python program to lookup the scientific name for a
+#user-supplied organism name.
+
+
+import sqlite3, sys 
+
+
+if len(sys.argv) < 2:
+	print "Please provide the name of an organism."
+	sys.exit(1)
+	
+organism = sys.argv[1]
+
+
+
+conn = sqlite3.connect('taxa.db3')
+params = [organism]
+c = conn.cursor()
+c.execute("""
+	select * from taxonomy, name 
+	where name.name = ?
+	and 
+	taxonomy.tax_id = name.tax_id; 
+	""", params)
+
+for row in c:
+        print " Scientific Name:", row[0]
