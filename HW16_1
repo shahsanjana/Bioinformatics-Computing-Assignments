@@ -1,0 +1,33 @@
+#Add some try/except blocks in your DNA and codon_table modules from Lecture 15.
+#Convert your modules for DNA sequence and codons to a codon_table and DNASeq class.
+#Demonstrate the use of this module and the codon table module to translate an amino-acid sequence
+#in all six-frames with just a few lines of code.
+
+from MyDNAStuffClass import MyDNAStuff 
+from CodonTableClass import CodonTable
+import sys
+
+table = CodonTable()
+seq = MyDNAStuff()
+
+try:
+    table.read_codons_from_filename(sys.argv[1])
+except IndexError: 
+    print "Provide codon table filename"
+except IOError:
+    print "Can't find codon table filename"
+
+try:
+    x = seq.read_seq_from_filename(sys.argv[2])
+except IndexError: 
+    print "Provide sequence filename"
+except IOError: 
+    print"Can't find sequence filename"
+#y = seq.reverseComplement()
+
+try:
+    for frame in [1,2,3]:
+        print "Frame", frame, "(Forward):",table.translate(x,frame)
+        print "Frame", -frame, "(Reverse):",table.translate(seq.reverseComplement(), frame)
+except NameError:
+    pass
