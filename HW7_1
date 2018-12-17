@@ -1,0 +1,70 @@
+#Using just the concepts introduced so far, find as many ways as possible to 
+#code DNA reverse complement (at least 3!)
+#You may use any built-in function or string or list method.
+#You may use only basic data-types and lists and dictionaries.
+#Compare and critique each technique for robustness, speed, and correctness.
+
+#method 1: using list methods  
+import sys
+seq = sys.argv[1]
+
+def reverse_comp1(seq):
+    origseq = seq.upper()
+    newseq = []
+    for n in origseq:
+            if n == "A":
+                comp = "T"
+                newseq.append(comp)
+            elif n == "T":
+                comp = "A"
+                newseq.append(comp)
+            elif n == "C":
+                comp = "G"
+                newseq.append(comp)
+            elif n == "G": 
+                comp = "C"
+                newseq.append(comp)
+            else:
+                comp = n
+                newseq.append(comp)
+            
+    return "".join(reversed(newseq))
+    #makes all the iterations of the loop before the return
+   
+print reverse_comp1(seq)
+
+
+#method 2: using dictionaries and lists   
+
+import sys
+s = sys.argv[1]
+seq = s.upper()
+
+def reverse_comp2(seq):
+    complement = {'A': 'T', 'C': 'G', 'G': 'C', 'T': 'A', 'N':'N'}
+    reversedsequence = list((reversed(seq)))
+    #reversed only takes things that behave as a list and returns it as a list 
+    newsequence = ""
+    for nucleotide in reversedsequence:
+        newsequence = newsequence +(complement[nucleotide])
+    return newsequence
+
+print reverse_comp2 (seq)
+
+
+#method 3 using string and list methods
+import sys
+seq = sys.argv[1]
+
+
+def reverse_comp3 (seq):
+    from string import maketrans
+    uppercaseseq = seq.upper()
+    bases = "ATCGN"
+    comps = "TAGCN"
+    complement = maketrans(bases,comps)
+    newseq= uppercaseseq.translate(complement)
+    print newseq[::-1]
+
+
+reverse_comp3(seq)
