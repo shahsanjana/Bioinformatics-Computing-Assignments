@@ -1,0 +1,45 @@
+#Putative Human – Mouse BRCA1 Orthologs
+#	Write a program using NCBI's E-Utilities to retrieve the ids of RefSeq human BRCA1 proteins from NCBI. Use the query:
+#"Homo sapiens"[Organism] AND BRCA1[Gene Name] AND REFSEQ 
+#	Extend your program to search these protein ids (one at a time) vs RefSeq proteins (refseq_protein) using the NCBI blast web-service.
+#	Further extend your program to filter the results for significance (E-value < 1.0e-5) and to extract mouse sequences 
+#(match "Mus musculus" in the description). Note: you may need to 
+#	Request at least 200 alignments from qblast to see the first mouse protein (keyword parameter hitlist_size, default is 50), or 
+#	Restrict the qblast search to mouse refseq proteins (keyword parameter entrez_query)
+
+
+
+from Bio import Entrez, SeqIO
+import os.path
+from Bio.Blast import NCBIWWW, NCBIXML
+
+
+Entrez.email = '@georgetown.edu'
+
+handle = Entrez.esearch(db="protein",term="Homo sapiens[Orgn]AND BRCA1[Gene] AND REFSEQ")
+result = Entrez.read(handle)
+handle.close()
+idlist = (result["IdList"])
+
+
+for x in idlist:
+    if not os.path.exists("blastp-refseq_protein-BRCA1"+x+".xml"):
+        
+        result_handle = NCBIWWW.qblast("blastp", "refseq_protein",x,expect= 1.0e-5, entrez_query= "Mus musculus")
+        blast_results = result_handle.read()
+        result_handle.close()
+    
+        save_file = open("blastp-refseq_protein-BRCA1"+ x +".xml", "w")
+        save_file.write(blast_results)
+        save_file.close()
+        
+    result_handle = open("blastp-refseq_protein-BRCA1"+ x +".xml")
+    for blast_result in NCBIXML.parse(result_handle):
+        for desc in blast_result.descriptions:
+            print "Closest Mus musculus ortholog to Homo sapien ID :", x
+            print '****Alignment****'
+            print 'sequence:', desc.title
+            print 'e value:', desc.e
+            print "\n"
+            break 
+            
