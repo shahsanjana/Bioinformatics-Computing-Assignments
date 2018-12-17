@@ -1,0 +1,83 @@
+#a)Modify your DNA translation program to translate in each forward frame (1,2,3) (from each possible forward frame?)
+#b)Modify your DNA translation program to translate in each reverse (complement) translation frame too.
+#c)Modify your translation program to handle 'N' symbols in the third position of a codon
+#If all four codons represented correspond to the same amino-acid, then output that amino-acid.
+#Otherwise, output 'X'.
+
+
+import sys 
+arg1 = sys.stdin.read()
+
+inputseq = "".join(arg1.split())
+
+#anthrax_seq 
+#TTGAGTAGACGAAGAGGTGTCATGTCAAATCAATTTAAAGAAGAGCTTGCAAAAGAGCTA
+#GGCTTTTATGATGTTGTTCAGAAAGAAGGATGGGGCGGAATTCGTGCGAAAGATGCTGGT
+#AACATGGTGAAACGTGCTATAGAAATTGCAGAACAGCAATTAATGAAACAAAACCAGTAG
+
+f = open ("standard.code")
+#f = open('bac.code')
+data = {}
+for l in f:
+    sl = l.split() 
+    key = sl[0]
+    value = sl[2]
+    data[key] = value   
+
+f.close()
+
+b1 = data['Base1']
+b2 = data['Base2']
+b3 = data['Base3']
+aa = data['AAs']
+st = data['Starts'] 
+ns = "XXXXssssXXXXXXXXllllppppXXXXrrrrXXXXttttXXXXXXXXvvvvaaaaXXXXgggg"
+codons = {}
+init = {}
+codonsNs = {}
+
+n = len(aa)
+
+for i in range(n):
+    codon = b1[i] + b2[i] + b3[i]
+    codons[codon] = aa[i]
+    Ns = b1[i] + b2[i] + "N"
+    codonsNs[Ns] = ns[i]
+    init[codon] = (st[i] == 'M')
+
+codonsandns = dict(codons, **codonsNs) 
+
+
+def protein_seq(seq):
+    seqlen = len(seq)
+    aaseq = []
+    for i in range(0,seqlen,3):
+        codon = seq[i:i+3]
+        aa = codonsandns.get(codon," #")
+        aaseq.append(aa)
+        
+    x =''.join(aaseq)
+    return x.upper()
+    
+    
+
+def reverse_comp(seq):
+    from string import maketrans
+    uppercaseseq = seq.upper()
+    bases = "ATCGN"
+    comps = "TAGCN"
+    complement = maketrans(bases,comps)
+    newseq= uppercaseseq.translate(complement)
+    return newseq[::-1]
+
+
+
+def translation_frame(seq,num):
+    trans_frame = num - 1
+    print "The frame", num, "protein of the sequence:" , protein_seq(seq[trans_frame:])
+    newseq = reverse_comp(seq)
+    print "the frame -",num, "protein of the sequence is:", protein_seq(newseq[trans_frame:])
+    print newseq
+
+
+translation_frame(inputseq,1)
