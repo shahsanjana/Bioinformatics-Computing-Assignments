@@ -1,0 +1,37 @@
+#Read through the ElementTree tutorials
+# test website http://www.uniprot.org/uniprot/Q9H400.xml
+#Write a program to pick out, and print, the references of a XML format 
+
+#UniProt entry, in a nicely formatted way.
+
+import xml.etree.ElementTree as ET
+import urllib
+import sys 
+
+if len(sys.argv) < 2:
+    print >>sys.stderr, "Please provide a url for the uniprot xml file"
+    sys.exit(1)
+
+xmlfile = sys.argv[1]
+thefile = urllib.urlopen(xmlfile)
+document = ET.parse(thefile)
+root = document.getroot()
+ns = '{http://uniprot.org/uniprot}'
+
+def reference_generator(ns,root):
+  entry = root.find(ns+'entry')  
+  for reference in entry.findall(ns+"reference"):
+        for citation in reference.findall(ns+"citation"):
+            print citation.attrib["type"], citation.attrib["date"]
+            for title in citation.findall(ns+"title"):
+                print title.text
+            for authorList in citation.findall(ns+"authorList"):
+                for person in authorList.findall(ns+"person"):
+                    print person.attrib["name"],
+                print 
+            for dbReference in citation.findall(ns+"dbReference"):
+                print dbReference.attrib["type"], dbReference.attrib["id"],
+            print "\n"
+
+
+reference_generator(ns,root)
