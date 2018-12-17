@@ -1,0 +1,15 @@
+#	Write a python program to print out the codon for Methionine (aka the start codon) backwards in lower-case symbols.
+# Start with Methionine represented as string variable codon=“ATG”
+
+
+#sequence of methionine
+
+MET = "ATG"
+lowercase = MET.lower()
+backwards = lowercase[-1] + lowercase[-2] + lowercase[-3]
+
+print (lowercase)
+
+print (backwards)
+
+
