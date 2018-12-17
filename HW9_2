@@ -1,0 +1,35 @@
+#Write a program to compute and output the frequency of each nucleotide in a DNA sequence using 
+# a dictionary 
+# (see lec. 8).
+#Output the frequencies in most-occurrences to least-occurrences order.
+
+
+import sys 
+arg1 = sys.stdin.read()
+
+sequence1 = "".join(arg1.split())
+
+def frequency_counter(sequence):
+    
+    nuc_count = {}
+    for nuc in sequence:
+        nuc_count[nuc] = sequence.count(nuc)
+
+    A = len(sequence)
+    frequencies = [] 
+    nucleotides = [] 
+    for k,v in nuc_count.items():
+        frequencies.append((float(v)/A))
+        nucleotides.append(k)
+  
+    nuc_freq = zip(nucleotides,frequencies) 
+    dict_nuc_freq = dict(nuc_freq)
+
+    paired_frequencies = sorted(dict_nuc_freq.items(), key=lambda x: x[1], reverse = True)
+    return paired_frequencies
+  
+
+  
+print "The frequencies of each nucleotide from the provided sequence is:\n", frequency_counter(sequence1)
+
+
