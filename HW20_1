@@ -1,0 +1,59 @@
+
+#Find potential fruit fly / yeast orthologs
+#Download FASTA files drosoph-ribosome.fasta.gz
+#and yeast-ribosome.fasta.gz from the course data-directory.
+#Uncompress and format each FASTA file for BLAST
+#Search fruit fly ribosomal proteins against yeast ribosomal proteins
+#For each fruit fly query, output the best yeast protein if it has a significant E-value.
+#What ribosomal protein is most highly conserved between fruit fly and yeast?
+# Special modules for running blast
+
+from Bio.Blast.Applications import NcbiblastpCommandline
+
+# Set the blast program and arguments as strings
+blast_prog   = '/usr/bin/blastp'
+blast_query = 'drosoph-ribosome.fasta'
+blast_db    = 'blastdb/yeast-ribosome.fasta'
+
+#make sure the drosoph ribosome file is outside of the database folder 
+
+
+cmdline = NcbiblastpCommandline(cmd=blast_prog,
+                                query=blast_query,
+                                db=blast_db,
+                                outfmt=5,
+                                out="results1.xml")
+
+stdout, stderr = cmdline()
+
+
+from Bio.Blast import NCBIXML
+
+output = {} 
+result_handle = open("results1.xml")
+for blast_result in NCBIXML.parse(result_handle):
+    for alignment in blast_result.alignments:
+        for hsp in alignment.hsps:
+            if hsp.expect < 1e-10:
+                print '****Alignment****'
+                print "query", blast_result.query
+                print 'BLAST match:', alignment.title
+                print 'length:', alignment.length
+                print 'e value:', hsp.expect
+                print "\n"
+                output[blast_result.query] = [alignment.title, hsp.expect,alignment.length]
+
+#since BLAST is a huge database, the "sample size" is large and therefore the lowest e value
+# i took to be the most conserved sequence
+
+l= min([y[1] for x,y in output.items()])
+
+print "~Most highly conserved protein~"
+
+for k,v in output.items():
+    if v[1] == l:
+        print "Query protein:", k
+        print "Database protein:",v[0]
+        print "E-value:", v[1]
+        print "length of hit:", v[2]
+        
