@@ -1,0 +1,65 @@
+#Write a program that reads the microarray data in “data.csv” and computes the mean and standard
+#deviation of the expression values of a specific gene overall, and within each sample category.
+#Get the name of the microarray datafile from the command-line.
+#Get the name of the gene from the command-line.
+
+import csv
+import sys
+
+if len(sys.argv) < 3:
+    print >>sys.stderr, "Input Data File and gene"
+    sys.exit()
+    
+data = sys.argv[1]
+gene = sys.argv[2] 
+
+handle = open(data)
+ 
+
+# Headers, and tab-separated-values
+rows = csv.DictReader(handle)
+# Iterate through the rows
+#for CSV no tab is necessary because it doesn't need the tab
+
+
+values1 = []
+values2 = []
+
+total_sum = 0
+for r in rows:
+        # access r as a dictionary - headers are keys
+    a = float(r[gene])
+    if (r["TUMOUR"])== "1":
+        values1.append(a)
+    else:
+        (r["TUMOUR"])=="2"
+        values2.append(a)
+            
+values_total = values1 + values2
+
+def mean_and_std_dev():
+    mean1 = sum(values1)/ len(values1)
+    print "The mean of gene", gene, "in tumour sample 1 is:", mean1
+    mean2 = sum(values2)/len(values2)
+    print "The mean of gene", gene, "in tumour sample 2 is:", mean2
+    mean_total=(sum(values1)+sum(values2))/(len(values1)+len(values2))
+    print "The mean of gene", gene, "in both of the tumour samples is:", mean_total
+
+    meansub1 = map(lambda x:(x-mean1)**(2), values1)
+    std_dev1 =(sum(meansub1)/(len(values1)-1))**(0.5)
+    print "The standard deviation of gene", gene," in tumour sample 1 is:", std_dev1
+
+    meansub2 = map(lambda y:(y-mean2)**(2), values2)
+    std_dev2 =(sum(meansub2)/(len(values2)-1))**(0.5)
+    print "The standard deviation of gene", gene, "in tumour sample 2 is:", std_dev2
+
+    meansubtotal = map(lambda z:(z-mean_total)**(2), values_total)
+    std_devtotal = (sum(meansubtotal)/(len(values_total)-1))**(0.5)
+    print "The total standard deviation of gene", gene, "in both of the tumour samples is:", std_devtotal
+
+    
+
+
+mean_and_std_dev()
+
+handle.close()
