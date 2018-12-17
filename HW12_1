@@ -1,0 +1,84 @@
+#0.  Read through and try the examples from Chapters
+#2-5 of BioPython's Tutorial.
+#1a. Download human proteins from RefSeq and
+#compute amino-acid frequencies for the
+#(RefSeq) human proteome.
+#Which amino-acid occurs the most? The least?
+#Hint: access RefSeq human proteins in
+#human.protein.fasta.gz from the course data-folder.
+#1b. Download human proteins from SwissProt and
+#compute amino-acid frequencies for the
+#SwissProt human proteome.
+#Which amino-acid occurs the most? The least?
+#Hint: access SwissProt human proteins from
+#1c. How similar are the human amino-acid
+#frequencies of in RefSeq and SwissProt?
+
+#files: human.protein.fasta.gz & uniprot_sprot_human.dat.gz
+
+import Bio.SeqIO
+import sys
+import gzip
+
+if len(sys.argv) < 3:
+    print >>sys.stderr, "Please provide both sequence files"
+    sys.exit(1)
+    
+seqfile = sys.argv[1]
+seqfile2 = sys.argv[2]
+
+seqfile = gzip.open(seqfile)
+seqfile2 = gzip.open(seqfile2) 
+
+
+def AA_count_dictionary(seqfile, format):
+    count={}
+    AA = list("GALMFWKQESPVICYHRNDT")
+    for seq_record in Bio.SeqIO.parse(seqfile,format):
+        for aa in seq_record.seq:
+            count[aa] = count.get(aa,0)+1
+    for k,v in count.items():
+        if k not in AA:
+            del count[k]
+    return count    
+
+    
+def AA_frequencies(dict1,format1,dict2,format2):
+        aasum = sum(dict1.values())
+        aasum2 = sum(dict2.values())
+    
+        dict1.update((k,v/float(aasum)) for k, v in dict1.items())
+        dict2.update((k2,v2/float(aasum2))for k2,v2 in dict2.items())
+
+        freq_comp = set(dict1.keys()) and set(dict2.keys())
+        print freq_comp
+        for AA in freq_comp:
+            print AA, format1, dict1[AA], format2, dict2[AA]
+    
+def AA_min_max(dict,format):
+    maximum =max(dict,key=dict.get)
+    print "The frequency of the most common amino acid in",format,"is:", maximum, (dict[maximum]/ float(sum(dict.values())))
+    minimum = min(dict,key=dict.get)
+    print "The frequency of the least common amino acid in",format,"is:", minimum, (dict[minimum]/ float(sum(dict.values())))
+
+def compare(dict1,dict2):
+    compdict = {key: dict1[key] - dict2.get(key, 0) for key in dict1.keys()}
+    for k,v in compdict.items():
+       print k,"=",v
+
+
+    
+#calling functions and outputs    
+AA_dictionary1 = AA_count_dictionary(seqfile,"fasta")
+
+AA_dictionary2 = AA_count_dictionary(seqfile2,"swiss")
+
+AA_frequencies(AA_dictionary1,"fasta", AA_dictionary2,"swiss")
+
+AA_min_max(AA_dictionary1,"fasta")
+AA_min_max(AA_dictionary2,"swiss")
+
+print "The amino acid frequency differences(fasta-swiss)are:\n",compare(AA_dictionary1, AA_dictionary2)
+
+
+
