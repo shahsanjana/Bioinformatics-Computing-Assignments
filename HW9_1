@@ -1,0 +1,13 @@
+#Write a reverse complement function (and package it up as a program) as compactly 
+# as possible, using the techniques introduced today.
+#Hint: Use a dictionary for complement, map to apply the get method, reversed, and join.
+
+import sys 
+seq = sys.argv[1]
+
+def reverse_complement(seq):
+    return "".join(map(lambda x: dict (A = "T", C = "G", T ="A", G ="C").get(x,x), reversed(seq.upper())))
+    
+print reverse_complement(seq)
+
+
