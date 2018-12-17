@@ -1,0 +1,43 @@
+#Write a Python program to determine whether or not a DNA sequence consists of a (integer) number of (perfect) "tandem" repeats.
+#Test it on sequences:
+#AAAAAAAAAAAAAAAA
+#CACACACACACAC
+#ATTCGATTCGATTCG
+#GTAGTAGTAGTAGTA
+#TCAGTCACTCACTCAG
+#Is the sequence the same as many repetitions of its first character?
+#Is the first half of the sequence the same as the second half of the sequence?
+#Write a Python program to determine whether or not a DNA sequence consists of a (integer) number
+
+#Test sequences
+seq1 = "AAAAAAAAAAAAAAAA"
+seq2 = "CACACACACACACAC"
+seq3 = "ATTCGATTCGATTCG"
+seq4 = "GTAGTAGTAGTAGTA"
+seq5 = "TCAGTCACTCACTCAG"
+seq6 = "AA"
+seq7 = "AAA"
+
+#begin index at 1 so that you can see if the entire sequence repeats
+#which would indicate a perfect tandem repeat
+#an example of not a tandem
+#CACAC*2 = CACACCACAC, duplicating it shows the double C's
+def tandem_seqcheck(seq):
+    n = (seq+seq).find(seq,1,-1)
+    
+    if n == -1:
+        print "This sequence is not a perfect tandem repeat"
+        return None
+    else:
+        tandem =  seq[:n]
+    number_of_repeats = len(seq)/len(tandem)
+    perfect_tandem = tandem * number_of_repeats
+    print "Inputted sequence:", seq
+    print "Sequence of tandem repeat:", tandem
+    if seq == perfect_tandem:
+        print "The given sequence is a perfect tandem repeat with", number_of_repeats, "repeating sequences"
+
+tandem_seqcheck(seq7)
+
+#lowest index of substring
+#seq+seq addding another C not an A
