@@ -1,0 +1,47 @@
+HW3.2
+ 
+#Write a Python program to compute the reverse complement of a codon
+
+#Modularize! Place the reverse complement code in a new function. 
+#Call the new function with a variety of codons
+#Change the complement function to handle upper and lower-case nucleotide symbols.
+#Test your code with upper and lower-case codons
+
+#test
+#codon = "GTA"
+#codon = "XYZ"
+#codon = "aaa"
+
+codon = 'ATG'
+
+
+first = codon[0]
+second = codon[1]
+third = codon[2]
+
+
+print "The input codon:",codon
+
+def complement(nuc):
+    if nuc == 'A':
+        comp = 'T'
+    elif nuc == "a":
+        comp = "t"
+    elif nuc == 'T':
+        comp = 'A'
+    elif nuc == "t":
+        comp = "a"
+    elif nuc == 'C':
+        comp = 'G'
+    elif nuc == "c":
+        comp = "g"
+    elif nuc == 'G':
+        comp = 'C'
+    elif nuc == "g":
+        comp = "c"
+    else:
+        comp = nuc
+    return comp
+
+print "The reverse complement is", complement(third)+ complement(second) + complement (first)
+
