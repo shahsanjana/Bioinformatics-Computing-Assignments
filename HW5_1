@@ -1,0 +1,30 @@
+#Write a command-line program to compute the reverse complement sequence for
+#the forward and reverse primer.
+
+#Test primers
+#cryptochrome (cry2)
+#forward: AGCAGGATTCAGACCATCACCC
+#reverse: CTTACGCAGACGACGCCTTTGT
+
+import sys
+input_seq1 = sys.argv [1]
+input_seq2 = sys.argv [2]
+
+def complement (nuc):
+    nucleotides = "ACGTacgtNn"
+    complements = "TGCAtgcaNn"
+    i = nucleotides.find (nuc)
+    if i >= 0:
+        comp = complements[i]
+    else:
+        comp = nuc
+    return comp
+
+def reversecomplement (seq):
+    seq = seq.upper()
+    newseq = ""
+    for nuc in seq:
+        newseq = complement (nuc) + newseq
+    return newseq
+print "reverse complement forward primer:", reversecomplement (input_seq1)
+print "reverse complement reverse primer:", reversecomplement (input_seq2)
