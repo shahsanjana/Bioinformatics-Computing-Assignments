@@ -1,0 +1,47 @@
+#Write a python program using SQLObject to find the
+#taxonomic lineage of a user-supplied organism name.
+#Make sure you use the small_taxa.db3 file from the course data-folder
+#Note that the supplied model.py files from Lectures 23 and 24 are different!
+#Lecture 23 uses taxa.db3, 
+#Lecture 24 uses small_taxa.db3
+
+import sys
+from model23 import *
+init()
+
+try:
+    org_name = str(sys.argv[1])
+except IndexError:
+    print >>sys.stderr, "provide name of organism"
+    sys.exit(1)
+
+try: 
+	name = Name.selectBy(name=org_name)[0]
+except IndexError:
+	print "Cannot find the supplied name:", org_name
+	sys.exit(1)
+	
+t = name.taxonomy
+    
+print "Organism",org_name, "has names:"
+for n in t.names:
+    print n.name
+    
+for c in t.children:
+    print "Organism",org_name,"has child:",c.scientific_name,c.taxid
+print "Organism",org_name,"has parent:",t.parent.scientific_name,t.parent.taxid
+
+r = t
+g = None
+while r != r.parent:
+    if r.rank == 'genus':
+        g = r
+        break
+    r = r.parent
+
+if g == None:
+    print "Organism",org_name,"has no genus"
+else:
+    print "Organism",org_name,"has genus:",g.scientific_name
+
+
