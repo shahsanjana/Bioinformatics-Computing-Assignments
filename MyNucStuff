@@ -1,0 +1,88 @@
+def translation_frame(seq):
+    upperseq = seq.upper()
+    met = upperseq.find("ATG")
+    if met == -1:
+        return None 
+    else:
+        translation_frame = met%3+1
+        return translation_frame
+    
+def upper(seq):
+    return seq.upper()
+
+compl_dict = {'A':'T', 'T':'A', 'C':'G', 'G':'C'}
+
+
+def complement(seq):
+    try:
+        return ''.join(map(compl_dict.get,seq))
+    except TypeError:
+            return ''.join(map(compl_dict.get,seq.upper()))
+
+
+def revseq(seq):
+    return ''.join(reversed(seq))
+
+def reverseComplement(seq):
+    return complement(revseq(seq))
+
+
+
+def tandem_seqcheck(seq):
+    n = (seq+seq).find(seq,1,-1)
+    if n == -1:
+        return None
+    else:
+        tandem = seq[:n]
+    number_of_repeats = len(seq)/len(tandem)
+    perfect_tandem = tandem * number_of_repeats
+    return tandem, len(tandem), number_of_repeats
+
+def self_hybrid (seq):
+    half_sequence =(len(seq)/2)
+    even_or_odd = len(seq) % 2 
+
+    first_half = seq[:half_sequence]
+    second_half = seq[half_sequence+even_or_odd:]
+    if reversecomplement(second_half) == first_half:
+        return True
+        if even_or_odd == 0:
+            return None
+    else: 
+        return False
+
+def number_of_nucs(seq):
+   return len(seq)
+
+def number_of_aminoacids(seq):
+    return len(seq)/3
+
+def gc_content(sequence):
+    seq = sequence.upper()
+    return seq.count('C') + seq.count('G')
+
+def at_content(sequence):
+    seq = sequence.upper()
+    return seq.count("A") + seq.count("T")
+
+def gc_percent(sequence):
+    seq = sequence.upper()
+    value = seq.count('C') + seq.count('G')
+    seqvalue = len(sequence)
+    return 100.0 * float(value) / float(seqvalue)
+
+def at_percent(sequence):
+    seq = sequence.upper()
+    value = seq.count('A') + seq.count('T')
+    seqvalue = len(sequence)
+    return 100.0 * float(value) / float(seqvalue)
+
+
+
+def read_seq_from_filename(seq_filename):
+
+    seq_file = open(seq_filename)
+    dna_seq = ''.join(seq_file.read().split())
+    dna_seq = dna_seq.upper()
+    seq_file.close()
+    return dna_seq
