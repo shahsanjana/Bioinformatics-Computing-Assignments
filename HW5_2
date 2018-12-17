@@ -1,0 +1,50 @@
+#Write a command-line program to test whether a PCR primer is a reverse complement palindrome.
+#Such a primer might fold and self-hybridize!
+#Test your program on at least the following primers:
+
+#Test sequences
+#TTGAGTAGACGCGTCTACTCAA  
+#TTGAGTAGACGTCGTCTACTCAA
+#ATATATATATATATAT 
+#ATCTATATATATGTAT
+
+
+import sys 
+input_seq= sys.argv [1]
+
+def complement (nuc): 
+    nucleotide = "ACGTacgtNn"
+    complements = "TGCAtgcaNn"
+    i = nucleotide.find(nuc)
+    if i >= 0: 
+        comp = complements [i]
+    else: 
+        comp=nuc
+    return comp 
+
+def reversecomplement (seq):
+    seq = seq.upper()
+    newseq = ""
+    for nucs in seq: 
+        newseq = complement (nucs) + newseq
+    return newseq
+  
+def self_hybrid (seq):
+    half_sequence =(len(seq)/2)
+    even_or_odd = len(seq) % 2 
+
+    first_half = seq[:half_sequence]
+    second_half = seq[half_sequence+even_or_odd:]
+    if reversecomplement(second_half) == first_half:
+        print "PCR primer is a reverse complement palindrome"
+        if even_or_odd == 0:
+            return None
+        else:
+            print "There is a hairpin loop"
+    else: 
+        print "PCR primer is not a reverse complement palindrome"
+
+    
+
+print "Reverse complement:", reversecomplement(input_seq)
+self_hybrid(input_seq)
