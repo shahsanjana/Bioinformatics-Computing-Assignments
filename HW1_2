@@ -1,0 +1,17 @@
+#Write a python program to find the position and the translation frame (1, 2, or 3) of the first start-codon 
+#in the DNA sequence: gcatcacgttatgtcgactctgtgtggcgtctgctggg
+
+DNA_sequence = "gcatcacgttatgtcgactctgtgtggcgtctgctggg"
+
+#met stands for methionine "first start codon"
+met = DNA_sequence.find("atg")
+#labeling starts from 0, "actual" shows the actual position in the string
+actual= met + 1
+
+#use met instead of actual because it substracts one
+translation_frame= met%3+1
+
+print "position of first start codon is",(actual)
+print "the reading frame is",translation_frame
+
+
