@@ -1,0 +1,53 @@
+# read codons from a file
+def readcodons(codonfile):
+    f = open(codonfile)
+    data = {}
+    for l in f:
+        sl = l.split()
+        key = sl[0]
+        value = sl[2]
+        data[key] = value    
+    f.close()
+
+    b1 = data['Base1']
+    b2 = data['Base2']
+    b3 = data['Base3']
+    aa = data['AAs']
+    st = data['Starts']
+
+    codons = {}
+    init = {}
+    n = len(aa)
+    for i in range(n):
+        codon = b1[i] + b2[i] + b3[i]
+        codons[codon] = aa[i]
+        init[codon] = (st[i] == 'M')
+    return codons,init
+
+# Import the required modules
+import sys
+
+# Check there is user input
+if len(sys.argv) < 2:
+    print "Please provide a codon-table on the command-line."
+    sys.exit(1)
+    
+# Assign the user input to variables
+codonfile = sys.argv[1]
+
+# Call the appropriate functions to get the codon table and the sequence
+codons,init = readcodons(codonfile)
+
+# Loop through the nucleotides (position 2 changes across the row).
+# Bare print starts a new line
+for n1 in 'TCAG':
+    for n3 in 'TCAG':
+        for n2 in 'TCAG':
+            codon = n1+n2+n3
+            print codon,codons[codon],
+            if init[codon]:
+                print "i   ",
+            else:
+                print "    ",
+        print
+    print
