@@ -1,0 +1,95 @@
+class MyDNAStuff:
+    def __init__(self, seq="", name=""):
+        self.seq = seq
+        self.name = name   
+
+    def sequence(self):
+        return self.seq
+    
+
+    def read_seq_from_filename(self,filename):
+        seq_file = open(filename)
+        self.seq = ''.join(seq_file.read().split())
+        return self.seq
+       
+
+    
+    def translation_frame(self):
+        upperseq = self.seq.upper()
+        met = upperseq.find("ATG")
+        if met == -1:
+            return None 
+        else:
+            translation_frame = met%3+1
+            return translation_frame
+    
+    def upper(self):
+        return self.seq.upper()
+
+    
+
+    def complement(self):
+        compl_dict = {'A':'T', 'T':'A', 'C':'G', 'G':'C'}
+        try:
+            return ''.join(map(compl_dict.get,self.seq))
+        except TypeError:
+                "".join(map(lambda n: comp_dict.get(n,n), seq))
+
+
+    def revseq(self):
+        return ''.join(reversed(self.seq))
+
+    def reverseComplement(self):
+        return "".join(reversed(self.complement()))
+
+
+
+    def tandem_seqcheck(self):
+        n = (seq+seq).find(self.seq,1,-1)
+        if n == -1:
+            return None
+        else:
+            tandem = self.seq[:n]
+        number_of_repeats = len(self.seq)/len(tandem)
+        perfect_tandem = tandem * number_of_repeats
+        return tandem, len(tandem), number_of_repeats
+
+    def self_hybrid (self):
+        half_sequence =(len(self.seq)/2)
+        even_or_odd = len(self.seq) % 2 
+
+        first_half = self.seq[:half_sequence]
+        second_half = self.seq[half_sequence+even_or_odd:]
+        if reversecomplement(second_half) == first_half:
+            return True
+            if even_or_odd == 0:
+                return None
+        else: 
+            return False
+
+    def number_of_nucs(self):
+        return len(self.seq)
+
+    def number_of_aminoacids(self):
+        return len(self.seq)/3
+
+    def gc_content(self):
+        seq = self.seq.upper()
+        return seq.count('C') + seq.count('G')
+
+    def at_content(self):
+        seq = sequence.upper()
+        return self.seq.count("A") + self.seq.count("T")
+
+    def gc_percent(self):
+        seq = self.seq.upper()
+        value = seq.count('C') + seq.count('G')
+        seqvalue = len(seq)
+        return 100.0 * float(value) / float(seqvalue)
+
+    def at_percent(self):
+        seq = self.seq.upper()
+        value = seq.count('A') + seq.count('T')
+        seqvalue = len(sequence)
+        return 100.0 * float(value) / float(seqvalue)
+
