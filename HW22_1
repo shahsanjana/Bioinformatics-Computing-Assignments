@@ -1,0 +1,29 @@
+#Read through the SQLObject documentation
+		
+#Write a python program using SQLObject to
+#lookup the scientific name for a user-supplied organism name.
+
+# Set up data-model
+from model_22 import *
+import sys 
+
+try:
+	org_name = str(sys.argv[1])
+except IndexError:
+	print >>sys.stderr, "provide the common name of an organism."
+	sys.exit(1)
+
+#str checks for however long the input sequence is
+try: 
+        hsname = Name.selectBy(name=org_name)[0]
+except IndexError:
+        print "Cannot find name:", org_name
+	sys.exit(1)
+
+scientific_name = hsname.taxa.scientificName
+
+#key value pair scientific name
+
+print "The scientific name:", scientific_name
+
+#weakness need to know exactly the type of name i.e. human and Human 
